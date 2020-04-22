@@ -9,6 +9,9 @@ export default function App() {
   );
 }
 
+const express = require('express');
+const app = express();
+const mysql = require('mysql');
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -17,3 +20,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+
