@@ -1,24 +1,34 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import {db} from './config';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-    </View>
-  );
+export default class App extends Component {
+  render() {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.red}>Hello world!</Text>
+        <table>
+          <tr><td>ラーメン</td></tr>
+          <tr><td>ラーメン</td></tr>
+          <tr><td>ラーメン</td></tr>
+        </table>
+      </View>
+    );
+  }
 }
 
-const express = require('express');
-const app = express();
-const mysql = require('mysql');
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: 'column',
+    margin: 'auto'
+  },
+
+  red: {
+    backgroundColor: "#ffffff",
+    color: "#ff0000",
+  },
+
+  table: {
+    color: "#ff0000"
   },
 });
-
-

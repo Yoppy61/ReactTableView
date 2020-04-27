@@ -1,4 +1,4 @@
-import firebase from 'firebase';
+import Firebase from 'firebase';
 
 // Firebase 初期化
 const firebaseConfig = {
@@ -11,6 +11,6 @@ const firebaseConfig = {
     appId: "1:445960593703:web:83f560307e59fa3d7ec902",
     measurementId: "G-X5JH0CD0D3"
 };
-firebase.initializeApp(firebaseConfig);
 
-export default firebase
+const app = Firebase.initializeApp(firebaseConfig);
+export const db = app.database();
