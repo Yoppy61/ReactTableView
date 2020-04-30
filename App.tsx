@@ -1,69 +1,85 @@
-import React from 'react';
-import { SafeAreaView, View, FlatList, StyleSheet, Text } from 'react-native';
+import React, { Component } from 'react';
+import { SafeAreaView, View, FlatList, StyleSheet, Text, ScrollView, ToolbarAndroidComponent } from 'react-native';
+import { Container, Header, Content, List, ListItem } from 'native-base';
 import Constants from 'expo-constants';
+import db from "./config";
+import * as functions from 'firebase-functions';
 
-const DATA = [
-  {
-    id: '1',
-    title: 'りゅうおう',
-  },
-  {
-    id: '2',
-    title: 'シドー',
-  },
-  {
-    id: '3',
-    title: 'ゾーマ',
-  },
-  {
-    id: '4',
-    title: 'デスピサロ',
-  },
-  {
-    id: '5',
-    title: 'ミルドラース',
-  },
-  {
-    id: '6',
-    title: 'デスタムーア',
-  },
-  {
-    id: '7',
-    title: 'オルゴ・デミーラ',
-  },
-  {
-    id: '8',
-    title: 'ラプソーン',
-  },
-  {
-    id: '9',
-    title: 'エルギオス',
-  },
-  {
-    id: '10',
-    title: 'マデサゴーラ',
-  },
-];
+export default class App extends Component {
+  constructor(props: App) {
+    super(props);
+    let ref = db.collection('data').doc('table');
+    ref.set({
+      1: "potato",
+      2: "apple",
+      3: "banana", 
+      4: "pokemon",
+      5: "golden",
+      6: "hoimi",
+      7: "zoma",
+      8: "gyodo",
+      9: "ninja",
+      10: "red",
+      11: "darkknight",
+      12: "gunbreaker",
+      13: "knight",
+      14: "white",
+      15: "black",
+      16: "fighter",
+      17: "dragon",
+      18: "samurai",
+      19: "monk",
+      20: "samonner",
+      21: "ironman",
+      22: "captainamerica",
+      23: "thor",
+      24: "loki",
+      25: "thanos",
+      26: "strenge",
+      27: "spider",
+      28: "marvel",
+      29: "endgame",
+      30: "stark",
+      31: "omega",
+      32: "sinryu",
+      33: "gundom",
+      34: "zaku",
+      35: "alex",
+      36: "unicorn",
+      37: "ball",
+      38: "nacht",
+      39: "zenos",
+      40: "ultima",
+    })
+    .then(function () {
+        console.log("Document successfully written!");
+      })
+      .catch(function (error) {
+        console.error("Error writing document: ", error);
+      });
+      {/* firestoreからデータを取得 */}
+    let getData: any[] = [];
+    db.collection('data').get().then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+          {/* 取得したデータを配列に代入 */}
+          getData.push(doc.data());
+      });
+    });
+    {/* stateを更新 */}
+    this.setState(getData);
+  }
 
-{/* typescriptのルールで、any型(なんでも有りの型)はNGの為、コンパイルは通るがコード上ではエラー*/}
-function Item({ title }) {
-  return (
-    <View style={styles.item}>
-      <Text style={styles.title}>{title}</Text>
-    </View>
-  );
-}
-
-export default function App() {
-  return (
-    <SafeAreaView style={styles.container}>
-      <FlatList
-        data={DATA}
-        renderItem={({ item }) => <Item title={item.title} />}
-        keyExtractor={item => item.id}
-      />
-    </SafeAreaView>
-  );
+  render() {
+    return (
+      <ScrollView>
+        <View style={styles.item}>
+          {/* データを代入した配列を全て表示 */}
+          {console.log("リターーーーーン")}
+          {this.state}
+        </View>
+      </ScrollView>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -72,11 +88,14 @@ const styles = StyleSheet.create({
     marginTop: Constants.statusBarHeight,
   },
   item: {
-    backgroundColor: '#4169e1',
+    backgroundColor: '#ffffff',
     padding: 20,
-    marginHorizontal: 8,
+    marginHorizontal: 20,
     borderWidth: 1,
-    borderColor: '#000000',
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderTopColor: 'transparent',
+    borderBottomColor: '#d3d3d3',
   },
   title: {
     fontSize: 32,
