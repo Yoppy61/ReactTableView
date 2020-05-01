@@ -8,48 +8,49 @@ import * as functions from 'firebase-functions';
 export default class App extends Component {
   constructor(props: App) {
     super(props);
+    this.state = {data: []}
     let ref = db.collection('data').doc('table');
     ref.set({
-      1: "potato",
-      2: "apple",
-      3: "banana", 
-      4: "pokemon",
-      5: "golden",
-      6: "hoimi",
-      7: "zoma",
-      8: "gyodo",
-      9: "ninja",
-      10: "red",
-      11: "darkknight",
-      12: "gunbreaker",
-      13: "knight",
-      14: "white",
-      15: "black",
-      16: "fighter",
-      17: "dragon",
-      18: "samurai",
-      19: "monk",
-      20: "samonner",
-      21: "ironman",
-      22: "captainamerica",
-      23: "thor",
-      24: "loki",
-      25: "thanos",
-      26: "strenge",
-      27: "spider",
-      28: "marvel",
-      29: "endgame",
-      30: "stark",
-      31: "omega",
-      32: "sinryu",
-      33: "gundom",
-      34: "zaku",
-      35: "alex",
-      36: "unicorn",
-      37: "ball",
-      38: "nacht",
-      39: "zenos",
-      40: "ultima",
+      0: "potato",
+      1: "apple",
+      2: "banana", 
+      3: "pokemon",
+      4: "golden",
+      5: "hoimi",
+      6: "zoma",
+      7: "gyodo",
+      8: "ninja",
+      9: "red",
+      10: "darkknight",
+      11: "gunbreaker",
+      12: "knight",
+      13: "white",
+      14: "black",
+      15: "fighter",
+      16: "dragon",
+      17: "samurai",
+      18: "monk",
+      19: "samonner",
+      20: "ironman",
+      21: "captainamerica",
+      22: "thor",
+      23: "loki",
+      24: "thanos",
+      25: "strenge",
+      26: "spider",
+      27: "marvel",
+      28: "endgame",
+      29: "stark",
+      30: "omega",
+      31: "sinryu",
+      32: "gundom",
+      33: "zaku",
+      34: "alex",
+      35: "unicorn",
+      36: "ball",
+      37: "nacht",
+      38: "zenos",
+      39: "ultima",
     })
     .then(function () {
         console.log("Document successfully written!");
@@ -58,25 +59,29 @@ export default class App extends Component {
         console.error("Error writing document: ", error);
       });
       {/* firestoreからデータを取得 */}
-    let getData: any[] = [];
-    db.collection('data').get().then(function(querySnapshot) {
+    let getData: string[] = [];
+    db.collection('data').get().then( querySnapshot => {
       querySnapshot.forEach(function(doc) {
           {/* 取得したデータを配列に代入 */}
-          getData.push(doc.data());
+          for(let i=0;i<20;i++) {
+            getData.push(doc.data()[i]);
+          }
       });
+      this.reload(getData);
     });
-    {/* stateを更新 */}
-    this.setState(getData);
+  }
+
+  reload(datas:any[]){
+    console.log(datas);
+    this.setState({data:datas});
   }
 
   render() {
     return (
       <ScrollView>
-        <View style={styles.item}>
-          {/* データを代入した配列を全て表示 */}
-          {console.log("リターーーーーン")}
-          {this.state}
-        </View>
+        <View>
+          {this.state.data.map(dataItem => {return <Text style={styles.item}>{dataItem}</Text>})}
+       </View>
       </ScrollView>
     );
   }
