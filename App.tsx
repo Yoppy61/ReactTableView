@@ -3,13 +3,19 @@ import { SafeAreaView, View, FlatList, StyleSheet, Text, ScrollView, ToolbarAndr
 import { Container, Header, Content, List, ListItem } from 'native-base';
 import Constants from 'expo-constants';
 import db from "./config";
-import * as functions from 'firebase-functions';
+import { database } from 'firebase';
+
 
 export default class App extends Component {
+
+  //そもそもメンバ変数は使えるのか。この使い方はできないみたい
+  count: number = 0;
+
   constructor(props: App) {
-    super(props);
+    super(props)
     this.state = {data: []}
     let ref = db.collection('data').doc('table');
+    {/* firestoreにデータをセット */}
     ref.set({
       0: "potato",
       1: "apple",
@@ -58,31 +64,49 @@ export default class App extends Component {
       .catch(function (error) {
         console.error("Error writing document: ", error);
       });
-      {/* firestoreからデータを取得 */}
-    let getData: string[] = [];
-    db.collection('data').get().then( querySnapshot => {
-      querySnapshot.forEach(function(doc) {
-          {/* 取得したデータを配列に代入 */}
-          for(let i=0;i<20;i++) {
-            getData.push(doc.data()[i]);
-          }
+
+      this.getFirestore()
+  }
+
+  getFirestore() {
+      {/* firestoreからデータを取得 */} 
+      let count = this.state.data.length;
+      let getData: string[] = [];
+      db.collection('data').get().then( querySnapshot => {
+        querySnapshot.forEach(function(doc) {
+            {/* 取得したデータを配列に代入 */}
+            for(let i=0;i<20;i++) {
+              getData.push(doc.data()[count])
+              count++
+            }
+        });
+        this.reload(getData);
       });
-      this.reload(getData);
-    });
   }
 
   reload(datas:any[]){
-    console.log(datas);
+    console.log(datas)
     this.setState({data:datas});
+    {/* stateに保存されている配列の要素数取得 */}
+    console.log(this.state.data.length)
+  }
+
+  scrollPosition (event: any) {
+    let offsetY = event.nativeEvent.contentOffset.y // スクロール距離onmoment
+    let contentSizeHeight = event.nativeEvent.contentSize.height // scrollView contentSizeの高さ
+    let scrollViewHeight = event.nativeEvent.layoutMeasurement.height // scrollViewの高さ
+
+    if (offsetY + scrollViewHeight >= contentSizeHeight) {
+      console.log('一番下に到達！')
+      this.getFirestore()
+    }
   }
 
   render() {
     return (
-      <ScrollView>
-        <View>
-          {this.state.data.map(dataItem => {return <Text style={styles.item}>{dataItem}</Text>})}
-       </View>
-      </ScrollView>
+    <ScrollView onScrollEndDrag={props => console.log('onScrollEndDrag')}>
+      {this.state.data.map((dataItem: string, i: number) => {return <Text key={i} style={styles.item}>{dataItem}</Text>})}
+    </ScrollView>
     );
   }
 }
